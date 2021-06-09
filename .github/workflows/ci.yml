@@ -1,0 +1,63 @@
+name: CI
+
+on: [push]
+
+env:
+  node_version: "14.x"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup
+      run: |
+        docker-compose pull db
+        docker-compose build
+        docker-compose run --rm web sh -c 'exit 0'
+    - name: Lint
+      run: docker-compose run --rm web npm run lint
+
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup
+      run: |
+        docker-compose pull db
+        docker-compose build
+        docker-compose run --rm web sh -c 'exit 0'
+        docker-compose up --detach
+        docker-compose exec -T db psql -U postgres -c 'create database test;'
+    - name: Unit test
+      run: docker-compose exec -T web npm run test
+    - name: E2E test
+      run: docker-compose exec -T web npm run test:e2e
+
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup
+      run: |
+        docker-compose pull db
+        docker-compose build
+        docker-compose run --rm web sh -c 'exit 0'
+    - name: Build
+      run: docker-compose run --rm web npm run build
+
+  seed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup
+      run: |
+        docker-compose pull db
+        docker-compose build
+        docker-compose run --rm web sh -c 'exit 0'
+    - name: Seed
+      run: docker-compose run --rm web npm run console -- seed

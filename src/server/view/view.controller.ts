@@ -37,7 +37,7 @@ export class ViewController {
     await this.handler(req, res);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get('orders')
   public async indexOrders(@Req() req: Request, @Res() res: Response) {
     await this.handler(req, res);

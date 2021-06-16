@@ -4,8 +4,6 @@
 export type ValueTypes = {
     ["User"]: AliasType<{
 	id?:true,
-	provider?:true,
-	providerId?:true,
 	username?:true,
 	name?:true,
 	orders?:ValueTypes["Order"],
@@ -49,8 +47,6 @@ export type PartialObjects = {
     ["User"]: {
 		__typename?: "User";
 			id?:number,
-			provider?:string,
-			providerId?:string,
 			username?:string,
 			name?:string,
 			orders?:PartialObjects["Order"][],
@@ -98,8 +94,6 @@ export type PartialObjects = {
 export type User = {
 	__typename?: "User",
 	id:number,
-	provider:string,
-	providerId:string,
 	username:string,
 	name:string,
 	orders?:Order[],
@@ -165,8 +159,6 @@ export const AllTypesProps: Record<string,any> = {
 export const ReturnTypes: Record<string,any> = {
 	User:{
 		id:"Float",
-		provider:"String",
-		providerId:"String",
 		username:"String",
 		name:"String",
 		orders:"Order",

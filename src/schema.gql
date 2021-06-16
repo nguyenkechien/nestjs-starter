@@ -4,6 +4,8 @@
 
 type User {
   id: Float!
+  provider: String!
+  providerId: String!
   username: String!
   name: String!
   orders: [Order]!

@@ -4,7 +4,6 @@ import { Request } from 'express';
 import { Zeus, MapType, Query, ValueTypes } from './types/graphql-zeus';
 
 const client = new ApolloClient({
-  // TODO: make this configurable
   uri: 'http://localhost:3000/graphql',
   cache: new InMemoryCache(),
 });

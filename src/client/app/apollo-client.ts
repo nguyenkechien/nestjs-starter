@@ -30,4 +30,17 @@ export const typedQuery = async <Q extends ValueTypes['Query']>(
   return typedData;
 };
 
+export const typedMutate = async <Q extends ValueTypes['Mutation']>(
+  mutation: Q,
+  // req: Request,
+) => {
+  const { data } = await client.mutate({
+    // context: context(req),
+    mutation: gql(Zeus.mutation(mutation)),
+  });
+  const typedData = data as MapType<Query, Q>;
+
+  return typedData;
+};
+
 export default client;

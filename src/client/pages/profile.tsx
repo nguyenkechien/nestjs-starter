@@ -1,14 +1,23 @@
 import React from 'react';
 import { NextPage } from 'next';
 import { Request } from 'express';
+import { wrapper } from '../redux/store';
 
-export async function getServerSideProps({ req }) {
+const callBackServerSideProps = async ({ req }) => {
   return {
-    props: { user: (req as Request).user },
+    props: {
+      user: (req as Request).user,
+    },
+    notFound: null,
+    redirect: null,
   };
-}
+};
 
-type Props = ExtractPromiseType<ReturnType<typeof getServerSideProps>>;
+export const getServerSideProps = wrapper.getServerSideProps(
+  () => callBackServerSideProps,
+);
+
+type Props = ExtractPromiseType<ReturnType<typeof callBackServerSideProps>>;
 
 const Profile: NextPage<Props['props']> = (props) => {
   const { user } = props;

@@ -21,7 +21,7 @@ export class SeedService {
   }
 
   async seedThings() {
-    const things = [{ name: 'this is a thing you can order' }];
+    const things = [{ name: 'order-1' }, { name: 'order-2' }];
 
     for (const thingParams of things) {
       const thing = await this.thingsService.findOne({

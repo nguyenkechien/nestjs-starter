@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NextPage } from 'next';
 import { Request } from 'express';
+import _ from 'lodash';
 
-import { typedQuery } from '../app/apollo-client';
+import { typedMutate, typedQuery } from '../app/apollo-client';
+import { wrapper } from '../redux/store';
 
-export async function getServerSideProps({ req }) {
+const callBackServerSideProps = async ({ req }) => {
   const data = await typedQuery(
     {
       orders: {
@@ -26,20 +28,55 @@ export async function getServerSideProps({ req }) {
       things: data.things,
     },
   };
-}
+};
 
-type Props = ExtractPromiseType<ReturnType<typeof getServerSideProps>>;
+export const getServerSideProps = wrapper.getServerSideProps(
+  () => callBackServerSideProps,
+);
 
+type Props = ExtractPromiseType<ReturnType<typeof callBackServerSideProps>>;
+type ThingOrderType = {
+  id: number;
+  name: string;
+};
 const Orders: NextPage<Props['props']> = (props) => {
   console.log(props);
-  const order = () => {
-    // client.mutate({ mutation: })
+  const [myOrders, setMyOrders] = useState(props.orders);
+  const order = async (thing: ThingOrderType) => {
+    const orderThing = {
+      alias: `${thing.id}`,
+      thingName: thing.name,
+    };
+    const data = await typedMutate({
+      createOrder: [orderThing, { alias: true, thing: { name: true } }],
+    });
+    const merged = _.merge(
+      _.keyBy(myOrders, 'alias'),
+      _.keyBy([data.createOrder], 'alias'),
+    );
+    const newOrder = _.values(merged);
+    setMyOrders(newOrder);
   };
   return (
     <div>
       <h1>Orders overview</h1>
-      {JSON.stringify(props)}
-      <button></button>
+      <h3>Hello {props.user.username}</h3>
+      <div>Things</div>
+      <ul>
+        {props.things.map((thing) => (
+          <li key={thing.id} onClick={() => order(thing)}>
+            {thing.name}
+          </li>
+        ))}
+      </ul>
+      <br />
+      <hr />
+      <div>My Order</div>
+      <ul>
+        {myOrders.map((o) => (
+          <li key={o.alias}>{`my order-${o.alias}-${o.thing.name}`}</li>
+        ))}
+      </ul>
     </div>
   );
 };

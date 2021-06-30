@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { HYDRATE } from 'next-redux-wrapper';
 import type { AppState } from '../store';
 
 // Define a type for the slice state
@@ -25,6 +26,12 @@ export const counterSlice = createSlice({
     // Use the PayloadAction type to declare the contents of `action.payload`
     incrementByAmount: (state, action: PayloadAction<number>) => {
       state.value += action.payload;
+    },
+  },
+  extraReducers: {
+    [HYDRATE]: (state, actions) => {
+      state.value += 1;
+      return state;
     },
   },
 });

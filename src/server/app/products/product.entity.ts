@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 import { ObjectType, Field } from '@nestjs/graphql';
 
@@ -21,6 +22,10 @@ export class Product {
   @Field()
   @Column({ nullable: false })
   name: string;
+
+  // @Field()
+  // @Column()
+  // attributes: []
 
   @Field()
   @Column()

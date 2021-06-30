@@ -20,7 +20,7 @@ export class ViewController {
       .render(req, res, parsedUrl.pathname, parsedUrl.query);
   }
 
-  @Get('home')
+  @Get('/')
   public async showHome(@Req() req: Request, @Res() res: Response) {
     const parsedUrl = parse(req.url, true);
     const things = await this.thingsService.findAll();

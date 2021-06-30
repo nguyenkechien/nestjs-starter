@@ -35,13 +35,76 @@ type Thing {
   updated_at: DateTime!
 }
 
+type Attribute {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Categorise {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Brand {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 type Query {
   users: [User!]!
   whoAmI: User!
   things: [Thing!]!
   orders: [Order!]!
+  attributes: [Attribute!]!
+  attribute(id: Int!): Attribute!
+  categorise(id: Int!): Categorise!
+  brands: [Brand!]!
+  brand(id: Int!): Brand!
 }
 
 type Mutation {
+  createThing(name: String!): Thing!
   createOrder(alias: String!, thingName: String!): Order!
+  createAttribute(createAttributeInput: CreateAttributeInput!): Attribute!
+  updateAttribute(updateAttributeInput: UpdateAttributeInput!): Attribute!
+  removeAttribute(id: Int!): Attribute!
+  createCategorise(createCategoriseInput: CreateCategoriseInput!): Categorise!
+  updateCategorise(updateCategoriseInput: UpdateCategoriseInput!): Categorise!
+  removeCategorise(id: Int!): Categorise!
+  createBrand(createBrandInput: CreateBrandInput!): Brand!
+  updateBrand(updateBrandInput: UpdateBrandInput!): Brand!
+  removeBrand(id: Int!): Brand!
+}
+
+input CreateAttributeInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateAttributeInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateCategoriseInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateCategoriseInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateBrandInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateBrandInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }

@@ -12,6 +12,9 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ThingsModule } from './things/things.module';
 import { OrdersModule } from './orders/orders.module';
+import { AttributesModule } from './attributes/attributes.module';
+import { CategoriseModule } from './categorise/categorise.module';
+import { BrandsModule } from './brands/brands.module';
 
 @Module({
   imports: [
@@ -43,6 +46,9 @@ import { OrdersModule } from './orders/orders.module';
     UsersModule,
     ThingsModule,
     OrdersModule,
+    AttributesModule,
+    CategoriseModule,
+    BrandsModule,
   ],
   providers: [SeedService, AppService],
   controllers: [AppController],

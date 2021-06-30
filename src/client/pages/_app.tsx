@@ -5,9 +5,12 @@ import { AppState, wrapper } from '../redux/store';
 import { Store } from '@reduxjs/toolkit';
 import NProgress from 'nprogress';
 import Router from 'next/router';
+import { Navigation } from '../app/components/navigation';
 
 interface MyAppProps extends AppInitialProps {
-  store: Store<AppState>;
+  pageProps: {
+    store: Store<AppState>;
+  };
 }
 class NextApp extends App<MyAppProps> {
   public static getInitialProps = wrapper.getInitialAppProps(
@@ -18,10 +21,7 @@ class NextApp extends App<MyAppProps> {
 
       return {
         pageProps: {
-          // Call page-level getInitialProps
-          // DON'T FORGET TO PROVIDE STORE TO PAGE
           ...initialProps,
-          // Some custom thing for all pages
           pathname: ctx.pathname,
         },
       };
@@ -46,6 +46,7 @@ class NextApp extends App<MyAppProps> {
 
   render() {
     const { Component, pageProps, router } = this.props;
+    console.log(this.props);
     return (
       <>
         <Head>
@@ -59,7 +60,10 @@ class NextApp extends App<MyAppProps> {
           />
         </Head>
         <GlobalStyle />
-        <Component {...pageProps} router={router} />
+        <Navigation />
+        <div className="main">
+          <Component {...pageProps} router={router} />
+        </div>
       </>
     );
   }

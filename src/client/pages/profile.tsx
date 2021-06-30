@@ -8,8 +8,6 @@ const callBackServerSideProps = async ({ req }) => {
     props: {
       user: (req as Request).user,
     },
-    notFound: null,
-    redirect: null,
   };
 };
 

@@ -1,7 +1,8 @@
 import React from 'react';
 import { NextPage } from 'next';
-import Link from 'next/link';
 import { ValueTypes } from '../app/types/graphql-zeus';
+import { incrementByAmount } from '../redux/modules/counter';
+import { useAppDispatch } from '../redux/hooks';
 
 type Props = {
   data: {
@@ -11,27 +12,19 @@ type Props = {
 
 const Home: NextPage<Props> = (props) => {
   const { data } = props;
-  console.log(data);
+  const dispatch = useAppDispatch();
   return (
     <div>
-      <ul>
-        <li>
-          <Link href="/orders">
-            <a> Order </a>
-          </Link>
-        </li>
-        <li></li>
-      </ul>
       <h1>Hello from NextJS! - Home</h1>
       some initial props including query params and controller data:
       <div>Things</div>
       <ul>
-        {data.things && data.things.length
-          ? data.things.map((thing) => (
-              <li key={`${thing.id}`}>{thing.name}</li>
-            ))
-          : ''}
+        {data.things?.map((thing) => (
+          <li key={`${thing.id}`}>{thing.name}</li>
+        ))}
       </ul>
+      <hr />
+      <button onClick={() => dispatch(incrementByAmount(2))}>Counter</button>
     </div>
   );
 };

@@ -34,17 +34,14 @@ export class OrdersService {
 
   async findOrCreateOne(params: FindOneOptions<Order> = {}) {
     let order: Order;
-
     order = await this.findOne(params);
-    if (!order) {
-      const conditions = params.where as CreateOrderDto;
-      order = await this.create({
-        alias: conditions.alias,
-        user: conditions.user,
-        thing: conditions.thing,
-      });
-    }
-
+    if (order) return order;
+    const conditions = params.where as CreateOrderDto;
+    order = await this.create({
+      alias: conditions.alias,
+      user: conditions.user,
+      thing: conditions.thing,
+    });
     return order;
   }
 

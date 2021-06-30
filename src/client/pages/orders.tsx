@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { NextPage } from 'next';
 import { Request } from 'express';
-import _ from 'lodash';
+import { merge, keyBy, values } from 'lodash';
 
 import { typedMutate, typedQuery } from '../app/apollo-client';
 import { wrapper } from '../redux/store';
@@ -40,7 +40,6 @@ type ThingOrderType = {
   name: string;
 };
 const Orders: NextPage<Props['props']> = (props) => {
-  console.log(props);
   const [myOrders, setMyOrders] = useState(props.orders);
   const order = async (thing: ThingOrderType) => {
     const orderThing = {
@@ -50,11 +49,11 @@ const Orders: NextPage<Props['props']> = (props) => {
     const data = await typedMutate({
       createOrder: [orderThing, { alias: true, thing: { name: true } }],
     });
-    const merged = _.merge(
-      _.keyBy(myOrders, 'alias'),
-      _.keyBy([data.createOrder], 'alias'),
+    const merged = merge(
+      keyBy(myOrders, 'alias'),
+      keyBy([data.createOrder], 'alias'),
     );
-    const newOrder = _.values(merged);
+    const newOrder = values(merged);
     setMyOrders(newOrder);
   };
   return (

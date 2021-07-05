@@ -15,6 +15,7 @@ import { OrdersModule } from './orders/orders.module';
 import { AttributesModule } from './attributes/attributes.module';
 import { CategoriseModule } from './categorise/categorise.module';
 import { BrandsModule } from './brands/brands.module';
+import { ProductsModule } from './products/products.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { BrandsModule } from './brands/brands.module';
     AttributesModule,
     CategoriseModule,
     BrandsModule,
+    ProductsModule,
   ],
   providers: [SeedService, AppService],
   controllers: [AppController],

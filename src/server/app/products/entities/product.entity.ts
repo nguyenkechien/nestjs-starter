@@ -1,19 +1,18 @@
+import { ObjectType, Field } from '@nestjs/graphql';
+import { Brand } from '../../brands/entities/brand.entity';
+import { Categorise } from '../../categorise/entities/categorise.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { ObjectType, Field } from '@nestjs/graphql';
-import { Product } from '../../products/entities/product.entity';
 
 @ObjectType()
 @Entity()
-export class Categorise {
+export class Product {
   @Field()
   @PrimaryGeneratedColumn()
   id: number;
@@ -22,14 +21,17 @@ export class Categorise {
   @Column({ nullable: false })
   name: string;
 
-  @Field((_type) => [Categorise], { nullable: 'items' })
-  @OneToOne((_type) => Categorise, { nullable: true })
-  @JoinColumn({ referencedColumnName: 'id' })
-  parentCategory: Categorise;
+  @Field()
+  @Column({ nullable: false })
+  price: number;
 
-  @Field((_type) => [Product], { nullable: 'items' })
-  @OneToMany((_type) => Product, (product) => product)
-  products?: Product[];
+  @Field((_type) => Brand)
+  @OneToOne((_type) => Brand, (brand) => brand)
+  brand?: Brand;
+
+  @Field((_type) => Categorise)
+  @OneToOne((_type) => Categorise, (category) => category)
+  category?: Categorise;
 
   @Field()
   @Column({ type: 'boolean', default: false, nullable: false })

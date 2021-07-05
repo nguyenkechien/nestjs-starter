@@ -32,18 +32,74 @@ export type ValueTypes = {
 	updated_at?:true,
 		__typename?: true
 }>;
+	["Attribute"]: AliasType<{
+	/** Example field (placeholder) */
+	exampleField?:true,
+		__typename?: true
+}>;
+	["Categorise"]: AliasType<{
+	/** Example field (placeholder) */
+	exampleField?:true,
+		__typename?: true
+}>;
+	["Brand"]: AliasType<{
+	/** Example field (placeholder) */
+	exampleField?:true,
+		__typename?: true
+}>;
 	["Query"]: AliasType<{
 	users?:ValueTypes["User"],
 	whoAmI?:ValueTypes["User"],
 	things?:ValueTypes["Thing"],
 	orders?:ValueTypes["Order"],
+	attributes?:ValueTypes["Attribute"],
+attribute?: [{	id:number},ValueTypes["Attribute"]],
+categorise?: [{	id:number},ValueTypes["Categorise"]],
+	brands?:ValueTypes["Brand"],
+brand?: [{	id:number},ValueTypes["Brand"]],
 		__typename?: true
 }>;
 	["Mutation"]: AliasType<{
 createThing?: [{	name:string},ValueTypes["Thing"]],
 createOrder?: [{	alias:string,	thingName:string},ValueTypes["Order"]],
+createAttribute?: [{	createAttributeInput:ValueTypes["CreateAttributeInput"]},ValueTypes["Attribute"]],
+updateAttribute?: [{	updateAttributeInput:ValueTypes["UpdateAttributeInput"]},ValueTypes["Attribute"]],
+removeAttribute?: [{	id:number},ValueTypes["Attribute"]],
+createCategorise?: [{	createCategoriseInput:ValueTypes["CreateCategoriseInput"]},ValueTypes["Categorise"]],
+updateCategorise?: [{	updateCategoriseInput:ValueTypes["UpdateCategoriseInput"]},ValueTypes["Categorise"]],
+removeCategorise?: [{	id:number},ValueTypes["Categorise"]],
+createBrand?: [{	createBrandInput:ValueTypes["CreateBrandInput"]},ValueTypes["Brand"]],
+updateBrand?: [{	updateBrandInput:ValueTypes["UpdateBrandInput"]},ValueTypes["Brand"]],
+removeBrand?: [{	id:number},ValueTypes["Brand"]],
 		__typename?: true
-}>
+}>;
+	["CreateAttributeInput"]: {
+	/** Example field (placeholder) */
+	exampleField:number
+};
+	["UpdateAttributeInput"]: {
+	/** Example field (placeholder) */
+	exampleField?:number,
+	id:number
+};
+	["CreateCategoriseInput"]: {
+	/** Example field (placeholder) */
+	exampleField:number
+};
+	["UpdateCategoriseInput"]: {
+	/** Example field (placeholder) */
+	exampleField?:number,
+	id:number
+};
+	["CreateBrandInput"]: {
+	/** Example field (placeholder) */
+	exampleField:number
+};
+	["UpdateBrandInput"]: {
+	/** Example field (placeholder) */
+	exampleField?:number,
+	id:number
+}
   }
 
 export type PartialObjects = {
@@ -77,18 +133,74 @@ export type PartialObjects = {
 			created_at?:PartialObjects["DateTime"],
 			updated_at?:PartialObjects["DateTime"]
 	},
+	["Attribute"]: {
+		__typename?: "Attribute";
+			/** Example field (placeholder) */
+	exampleField?:number
+	},
+	["Categorise"]: {
+		__typename?: "Categorise";
+			/** Example field (placeholder) */
+	exampleField?:number
+	},
+	["Brand"]: {
+		__typename?: "Brand";
+			/** Example field (placeholder) */
+	exampleField?:number
+	},
 	["Query"]: {
 		__typename?: "Query";
 			users?:PartialObjects["User"][],
 			whoAmI?:PartialObjects["User"],
 			things?:PartialObjects["Thing"][],
-			orders?:PartialObjects["Order"][]
+			orders?:PartialObjects["Order"][],
+			attributes?:PartialObjects["Attribute"][],
+			attribute?:PartialObjects["Attribute"],
+			categorise?:PartialObjects["Categorise"],
+			brands?:PartialObjects["Brand"][],
+			brand?:PartialObjects["Brand"]
 	},
 	["Mutation"]: {
 		__typename?: "Mutation";
 			createThing?:PartialObjects["Thing"],
-			createOrder?:PartialObjects["Order"]
-	}
+			createOrder?:PartialObjects["Order"],
+			createAttribute?:PartialObjects["Attribute"],
+			updateAttribute?:PartialObjects["Attribute"],
+			removeAttribute?:PartialObjects["Attribute"],
+			createCategorise?:PartialObjects["Categorise"],
+			updateCategorise?:PartialObjects["Categorise"],
+			removeCategorise?:PartialObjects["Categorise"],
+			createBrand?:PartialObjects["Brand"],
+			updateBrand?:PartialObjects["Brand"],
+			removeBrand?:PartialObjects["Brand"]
+	},
+	["CreateAttributeInput"]: {
+	/** Example field (placeholder) */
+	exampleField:number
+},
+	["UpdateAttributeInput"]: {
+	/** Example field (placeholder) */
+	exampleField?:number,
+	id:number
+},
+	["CreateCategoriseInput"]: {
+	/** Example field (placeholder) */
+	exampleField:number
+},
+	["UpdateCategoriseInput"]: {
+	/** Example field (placeholder) */
+	exampleField?:number,
+	id:number
+},
+	["CreateBrandInput"]: {
+	/** Example field (placeholder) */
+	exampleField:number
+},
+	["UpdateBrandInput"]: {
+	/** Example field (placeholder) */
+	exampleField?:number,
+	id:number
+}
   }
 
 // ------------------------------------------------------
@@ -131,22 +243,113 @@ export type Thing = {
 	updated_at:DateTime
 }
 
+export type Attribute = {
+	__typename?: "Attribute",
+	/** Example field (placeholder) */
+	exampleField:number
+}
+
+export type Categorise = {
+	__typename?: "Categorise",
+	/** Example field (placeholder) */
+	exampleField:number
+}
+
+export type Brand = {
+	__typename?: "Brand",
+	/** Example field (placeholder) */
+	exampleField:number
+}
+
 export type Query = {
 	__typename?: "Query",
 	users:User[],
 	whoAmI:User,
 	things:Thing[],
-	orders:Order[]
+	orders:Order[],
+	attributes:Attribute[],
+	attribute:Attribute,
+	categorise:Categorise,
+	brands:Brand[],
+	brand:Brand
 }
 
 export type Mutation = {
 	__typename?: "Mutation",
 	createThing:Thing,
-	createOrder:Order
+	createOrder:Order,
+	createAttribute:Attribute,
+	updateAttribute:Attribute,
+	removeAttribute:Attribute,
+	createCategorise:Categorise,
+	updateCategorise:Categorise,
+	removeCategorise:Categorise,
+	createBrand:Brand,
+	updateBrand:Brand,
+	removeBrand:Brand
+}
+
+export type CreateAttributeInput = {
+		/** Example field (placeholder) */
+	exampleField:number
+}
+
+export type UpdateAttributeInput = {
+		/** Example field (placeholder) */
+	exampleField?:number,
+	id:number
+}
+
+export type CreateCategoriseInput = {
+		/** Example field (placeholder) */
+	exampleField:number
+}
+
+export type UpdateCategoriseInput = {
+		/** Example field (placeholder) */
+	exampleField?:number,
+	id:number
+}
+
+export type CreateBrandInput = {
+		/** Example field (placeholder) */
+	exampleField:number
+}
+
+export type UpdateBrandInput = {
+		/** Example field (placeholder) */
+	exampleField?:number,
+	id:number
 }
 
 export const AllTypesProps: Record<string,any> = {
 	DateTime: "String",
+	Query:{
+		attribute:{
+			id:{
+				type:"Int",
+				array:false,
+				arrayRequired:false,
+				required:true
+			}
+		},
+		categorise:{
+			id:{
+				type:"Int",
+				array:false,
+				arrayRequired:false,
+				required:true
+			}
+		},
+		brand:{
+			id:{
+				type:"Int",
+				array:false,
+				arrayRequired:false,
+				required:true
+			}
+		}
+	},
 	Mutation:{
 		createThing:{
 			name:{
@@ -169,6 +372,144 @@ export const AllTypesProps: Record<string,any> = {
 				arrayRequired:false,
 				required:true
 			}
+		},
+		createAttribute:{
+			createAttributeInput:{
+				type:"CreateAttributeInput",
+				array:false,
+				arrayRequired:false,
+				required:true
+			}
+		},
+		updateAttribute:{
+			updateAttributeInput:{
+				type:"UpdateAttributeInput",
+				array:false,
+				arrayRequired:false,
+				required:true
+			}
+		},
+		removeAttribute:{
+			id:{
+				type:"Int",
+				array:false,
+				arrayRequired:false,
+				required:true
+			}
+		},
+		createCategorise:{
+			createCategoriseInput:{
+				type:"CreateCategoriseInput",
+				array:false,
+				arrayRequired:false,
+				required:true
+			}
+		},
+		updateCategorise:{
+			updateCategoriseInput:{
+				type:"UpdateCategoriseInput",
+				array:false,
+				arrayRequired:false,
+				required:true
+			}
+		},
+		removeCategorise:{
+			id:{
+				type:"Int",
+				array:false,
+				arrayRequired:false,
+				required:true
+			}
+		},
+		createBrand:{
+			createBrandInput:{
+				type:"CreateBrandInput",
+				array:false,
+				arrayRequired:false,
+				required:true
+			}
+		},
+		updateBrand:{
+			updateBrandInput:{
+				type:"UpdateBrandInput",
+				array:false,
+				arrayRequired:false,
+				required:true
+			}
+		},
+		removeBrand:{
+			id:{
+				type:"Int",
+				array:false,
+				arrayRequired:false,
+				required:true
+			}
+		}
+	},
+	CreateAttributeInput:{
+		exampleField:{
+			type:"Int",
+			array:false,
+			arrayRequired:false,
+			required:true
+		}
+	},
+	UpdateAttributeInput:{
+		exampleField:{
+			type:"Int",
+			array:false,
+			arrayRequired:false,
+			required:false
+		},
+		id:{
+			type:"Int",
+			array:false,
+			arrayRequired:false,
+			required:true
+		}
+	},
+	CreateCategoriseInput:{
+		exampleField:{
+			type:"Int",
+			array:false,
+			arrayRequired:false,
+			required:true
+		}
+	},
+	UpdateCategoriseInput:{
+		exampleField:{
+			type:"Int",
+			array:false,
+			arrayRequired:false,
+			required:false
+		},
+		id:{
+			type:"Int",
+			array:false,
+			arrayRequired:false,
+			required:true
+		}
+	},
+	CreateBrandInput:{
+		exampleField:{
+			type:"Int",
+			array:false,
+			arrayRequired:false,
+			required:true
+		}
+	},
+	UpdateBrandInput:{
+		exampleField:{
+			type:"Int",
+			array:false,
+			arrayRequired:false,
+			required:false
+		},
+		id:{
+			type:"Int",
+			array:false,
+			arrayRequired:false,
+			required:true
 		}
 	}
 }
@@ -199,15 +540,38 @@ export const ReturnTypes: Record<string,any> = {
 		created_at:"DateTime",
 		updated_at:"DateTime"
 	},
+	Attribute:{
+		exampleField:"Int"
+	},
+	Categorise:{
+		exampleField:"Int"
+	},
+	Brand:{
+		exampleField:"Int"
+	},
 	Query:{
 		users:"User",
 		whoAmI:"User",
 		things:"Thing",
-		orders:"Order"
+		orders:"Order",
+		attributes:"Attribute",
+		attribute:"Attribute",
+		categorise:"Categorise",
+		brands:"Brand",
+		brand:"Brand"
 	},
 	Mutation:{
 		createThing:"Thing",
-		createOrder:"Order"
+		createOrder:"Order",
+		createAttribute:"Attribute",
+		updateAttribute:"Attribute",
+		removeAttribute:"Attribute",
+		createCategorise:"Categorise",
+		updateCategorise:"Categorise",
+		removeCategorise:"Categorise",
+		createBrand:"Brand",
+		updateBrand:"Brand",
+		removeBrand:"Brand"
 	}
 }
 

@@ -40,14 +40,40 @@ type Attribute {
   exampleField: Int!
 }
 
-type Categorise {
-  """Example field (placeholder)"""
-  exampleField: Int!
+type Brand {
+  id: Float!
+  name: String!
+  products: [Product]!
+  publish: Boolean!
+  publish_start: DateTime!
+  publish_end: DateTime!
+  created_at: DateTime!
+  updated_at: DateTime!
 }
 
-type Brand {
-  """Example field (placeholder)"""
-  exampleField: Int!
+type Product {
+  id: Float!
+  name: String!
+  price: Float!
+  brand: Brand!
+  category: Categorise!
+  publish: Boolean!
+  publish_start: DateTime!
+  publish_end: DateTime!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type Categorise {
+  id: Float!
+  name: String!
+  parentCategory: [Categorise]!
+  products: [Product]!
+  publish: Boolean!
+  publish_start: DateTime!
+  publish_end: DateTime!
+  created_at: DateTime!
+  updated_at: DateTime!
 }
 
 type Query {
@@ -57,9 +83,11 @@ type Query {
   orders: [Order!]!
   attributes: [Attribute!]!
   attribute(id: Int!): Attribute!
-  categorise(id: Int!): Categorise!
+  categorise: [Categorise!]!
   brands: [Brand!]!
-  brand(id: Int!): Brand!
+  brand: Brand!
+  products: [Product!]!
+  product: Product!
 }
 
 type Mutation {
@@ -74,6 +102,9 @@ type Mutation {
   createBrand(createBrandInput: CreateBrandInput!): Brand!
   updateBrand(updateBrandInput: UpdateBrandInput!): Brand!
   removeBrand(id: Int!): Brand!
+  createProduct(createProductInput: CreateProductInput!): Product!
+  updateProduct(updateProductInput: UpdateProductInput!): Product!
+  removeProduct(id: Int!): Product!
 }
 
 input CreateAttributeInput {
@@ -88,23 +119,42 @@ input UpdateAttributeInput {
 }
 
 input CreateCategoriseInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  name: String!
+  parentCategoryId: Int
 }
 
 input UpdateCategoriseInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  name: String
+  parentCategoryId: Int
   id: Int!
 }
 
 input CreateBrandInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  name: String!
 }
 
 input UpdateBrandInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  name: String
+  id: Int!
+}
+
+input CreateProductInput {
+  name: String!
+  price: Float!
+  brandId: Float!
+  categoryId: Float!
+  publish: Boolean!
+  publishStart: DateTime!
+  publishEnd: DateTime!
+}
+
+input UpdateProductInput {
+  name: String
+  price: Float
+  brandId: Float
+  categoryId: Float
+  publish: Boolean
+  publishStart: DateTime
+  publishEnd: DateTime
   id: Int!
 }

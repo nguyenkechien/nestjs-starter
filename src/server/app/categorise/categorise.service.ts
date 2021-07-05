@@ -2,12 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateCategoriseInput } from './dto/create-categorise.input';
 import { UpdateCategoriseInput } from './dto/update-categorise.input';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  FindOneOptions,
-  Repository,
-  FindManyOptions,
-  FindConditions,
-} from 'typeorm';
+import { FindOneOptions, Repository, FindManyOptions } from 'typeorm';
 import { Categorise } from './entities/categorise.entity';
 
 @Injectable()
@@ -17,23 +12,32 @@ export class CategoriseService {
     private categoriseRepository: Repository<Categorise>,
   ) {}
 
-  create(createCategoriseInput: CreateCategoriseInput) {
-    return this.categoriseRepository.save(createCategoriseInput);
+  async create(createCategoriseInput: CreateCategoriseInput) {
+    const category = createCategoriseInput;
+    if (createCategoriseInput.parentCategoryId) {
+      const parentCategory = await this.findOne({
+        where: { id: category.parentCategoryId },
+      });
+      category.parentCategory = parentCategory;
+    }
+    return this.categoriseRepository.save(category);
   }
 
   findAll(params: FindManyOptions<Categorise> = {}) {
-    return this.categoriseRepository.find(params);
+    const query = Object.assign({ relations: ['parentCategory'] }, params);
+    return this.categoriseRepository.find(query);
   }
 
   findOne(params: FindOneOptions<Categorise> = {}) {
-    return this.categoriseRepository.findOne(params);
+    const query = Object.assign({ relations: ['subcategories'] }, params);
+    return this.categoriseRepository.findOne(query);
   }
 
   update(id: number, updateCategoriseInput: UpdateCategoriseInput) {
     return this.categoriseRepository.update(id, updateCategoriseInput);
   }
 
-  remove(params: FindConditions<Categorise> = {}) {
-    return this.categoriseRepository.delete(params);
+  remove(id: number) {
+    return this.categoriseRepository.delete(id);
   }
 }

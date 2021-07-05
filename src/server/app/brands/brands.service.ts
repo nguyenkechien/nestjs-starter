@@ -1,26 +1,33 @@
 import { Injectable } from '@nestjs/common';
 import { CreateBrandInput } from './dto/create-brand.input';
 import { UpdateBrandInput } from './dto/update-brand.input';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Brand } from './entities/brand.entity';
+import { Repository, FindManyOptions, FindOneOptions } from 'typeorm';
 
 @Injectable()
 export class BrandsService {
+  constructor(
+    @InjectRepository(Brand)
+    private brandRepository: Repository<Brand>,
+  ) {}
   create(createBrandInput: CreateBrandInput) {
-    return 'This action adds a new brand';
+    return this.brandRepository.save(createBrandInput);
   }
 
-  findAll() {
-    return `This action returns all brands`;
+  findAll(params: FindManyOptions<Brand> = {}) {
+    return this.brandRepository.find(params);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} brand`;
+  findOne(params: FindOneOptions<Brand> = {}) {
+    return this.brandRepository.findOne(params);
   }
 
   update(id: number, updateBrandInput: UpdateBrandInput) {
-    return `This action updates a #${id} brand`;
+    return this.brandRepository.update(id, updateBrandInput);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} brand`;
+    return this.brandRepository.delete(id);
   }
 }

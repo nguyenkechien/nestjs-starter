@@ -1,7 +1,9 @@
-import { InputType, Int, Field } from '@nestjs/graphql';
-
+import { InputType, Field } from '@nestjs/graphql';
 @InputType()
 export class CreateBrandInput {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number;
+  @Field()
+  name: string;
+  publish?: boolean;
+  publish_start?: Date;
+  publish_end?: Date;
 }

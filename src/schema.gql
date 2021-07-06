@@ -43,10 +43,11 @@ type Attribute {
 type Brand {
   id: Float!
   name: String!
+  description: String!
   products: [Product]!
-  publish: Boolean!
-  publish_start: DateTime!
-  publish_end: DateTime!
+  isPublished: Boolean!
+  publishStart: DateTime!
+  publishEnd: DateTime!
   created_at: DateTime!
   updated_at: DateTime!
 }
@@ -55,11 +56,12 @@ type Product {
   id: Float!
   name: String!
   price: Float!
+  description: String!
   brand: Brand!
   category: Categorise!
-  publish: Boolean!
-  publish_start: DateTime!
-  publish_end: DateTime!
+  isPublished: Boolean!
+  publishStart: DateTime!
+  publishEnd: DateTime!
   created_at: DateTime!
   updated_at: DateTime!
 }
@@ -67,11 +69,12 @@ type Product {
 type Categorise {
   id: Float!
   name: String!
-  parentCategory: [Categorise]!
+  parentCategory: Categorise
+  description: String!
   products: [Product]!
-  publish: Boolean!
-  publish_start: DateTime!
-  publish_end: DateTime!
+  isPublished: Boolean!
+  publishStart: DateTime!
+  publishEnd: DateTime!
   created_at: DateTime!
   updated_at: DateTime!
 }
@@ -84,10 +87,11 @@ type Query {
   attributes: [Attribute!]!
   attribute(id: Int!): Attribute!
   categorise: [Categorise!]!
+  category(id: Int!): Categorise!
   brands: [Brand!]!
-  brand: Brand!
+  brand(id: Int!): Brand!
   products: [Product!]!
-  product: Product!
+  product(id: Int!): Product!
 }
 
 type Mutation {
@@ -119,42 +123,94 @@ input UpdateAttributeInput {
 }
 
 input CreateCategoriseInput {
+  """This field set is published"""
+  isPublished: Boolean
+
+  """This field set date start publish"""
+  publishStart: DateTime
+
+  """This field set date end publish"""
+  publishEnd: DateTime
   name: String!
+  description: String!
+
+  """Id of the category parent"""
   parentCategoryId: Int
 }
 
 input UpdateCategoriseInput {
+  """This field set is published"""
+  isPublished: Boolean
+
+  """This field set date start publish"""
+  publishStart: DateTime
+
+  """This field set date end publish"""
+  publishEnd: DateTime
   name: String
+  description: String
+
+  """Id of the category parent"""
   parentCategoryId: Int
   id: Int!
 }
 
 input CreateBrandInput {
+  """This field set is published"""
+  isPublished: Boolean
+
+  """This field set date start publish"""
+  publishStart: DateTime
+
+  """This field set date end publish"""
+  publishEnd: DateTime
   name: String!
+  description: String!
 }
 
 input UpdateBrandInput {
+  """This field set is published"""
+  isPublished: Boolean
+
+  """This field set date start publish"""
+  publishStart: DateTime
+
+  """This field set date end publish"""
+  publishEnd: DateTime
   name: String
+  description: String
   id: Int!
 }
 
 input CreateProductInput {
+  """This field set is published"""
+  isPublished: Boolean
+
+  """This field set date start publish"""
+  publishStart: DateTime
+
+  """This field set date end publish"""
+  publishEnd: DateTime
   name: String!
   price: Float!
   brandId: Float!
   categoryId: Float!
-  publish: Boolean!
-  publishStart: DateTime!
-  publishEnd: DateTime!
+  description: String!
 }
 
 input UpdateProductInput {
+  """This field set is published"""
+  isPublished: Boolean
+
+  """This field set date start publish"""
+  publishStart: DateTime
+
+  """This field set date end publish"""
+  publishEnd: DateTime
   name: String
   price: Float
   brandId: Float
   categoryId: Float
-  publish: Boolean
-  publishStart: DateTime
-  publishEnd: DateTime
+  description: String
   id: Int!
 }

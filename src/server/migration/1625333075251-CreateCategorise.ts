@@ -68,10 +68,10 @@ export class CreateCategorise1625333075251 implements MigrationInterface {
   public async down(queryRunner: QueryRunner): Promise<void> {
     const productTable = await queryRunner.getTable('product');
     const foreignKey = productTable.foreignKeys.find(
-      (fk) => fk.columnNames.indexOf('category_id') !== -1,
+      (fk) => fk.columnNames.indexOf('categoryId') !== -1,
     );
     await queryRunner.dropForeignKey('product', foreignKey);
-    await queryRunner.dropColumn('product', 'category_id');
+    await queryRunner.dropColumn('product', 'categoryId');
     await queryRunner.dropTable('product');
     await queryRunner.dropTable('categorise');
   }

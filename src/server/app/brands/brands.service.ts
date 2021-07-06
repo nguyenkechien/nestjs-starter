@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateBrandInput } from './dto/create-brand.input';
-import { UpdateBrandInput } from './dto/update-brand.input';
+import { CreateBrandInput, CreateBrandDto } from './dto/create-brand.input';
+import { UpdateBrandInput, UpdateBrandDto } from './dto/update-brand.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Brand } from './entities/brand.entity';
 import { Repository, FindManyOptions, FindOneOptions } from 'typeorm';
@@ -29,5 +29,38 @@ export class BrandsService {
 
   remove(id: number) {
     return this.brandRepository.delete(id);
+  }
+
+  async findOrCreate({
+    name,
+    isPublished,
+    publishEnd,
+    publishStart,
+  }: CreateBrandInput) {
+    const brand = await this.findOne({ where: { name } });
+    if (brand) return brand;
+    const newBrand: CreateBrandDto = {
+      name,
+      isPublished,
+      publishEnd,
+      publishStart,
+    };
+    return this.create(newBrand);
+  }
+
+  async updateOrCreate(id: number, updateBrandInput: UpdateBrandInput) {
+    const brand = await this.findOne({ where: { id } });
+    if (!brand) return this.findOrCreate(updateBrandInput);
+
+    const updateBrand: UpdateBrandDto = {
+      id,
+      name: updateBrandInput.name,
+      isPublished: updateBrandInput.isPublished,
+      publishEnd: updateBrandInput.publishEnd,
+      publishStart: updateBrandInput.publishStart,
+    };
+
+    await this.update(id, updateBrand);
+    return updateBrand;
   }
 }

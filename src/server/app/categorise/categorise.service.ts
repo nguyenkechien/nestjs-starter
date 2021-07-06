@@ -1,6 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCategoriseInput } from './dto/create-categorise.input';
-import { UpdateCategoriseInput } from './dto/update-categorise.input';
+import {
+  CreateCategoriseInput,
+  CreateCategoriseDto,
+} from './dto/create-categorise.input';
+import {
+  UpdateCategoriseInput,
+  UpdateCategoriseDto,
+} from './dto/update-categorise.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, Repository, FindManyOptions } from 'typeorm';
 import { Categorise } from './entities/categorise.entity';
@@ -12,14 +18,7 @@ export class CategoriseService {
     private categoriseRepository: Repository<Categorise>,
   ) {}
 
-  async create(createCategoriseInput: CreateCategoriseInput) {
-    const category = createCategoriseInput;
-    if (createCategoriseInput.parentCategoryId) {
-      const parentCategory = await this.findOne({
-        where: { id: category.parentCategoryId },
-      });
-      category.parentCategory = parentCategory;
-    }
+  create(category: CreateCategoriseDto) {
     return this.categoriseRepository.save(category);
   }
 
@@ -29,15 +28,71 @@ export class CategoriseService {
   }
 
   findOne(params: FindOneOptions<Categorise> = {}) {
-    const query = Object.assign({ relations: ['subcategories'] }, params);
+    const query = Object.assign({ relations: ['parentCategory'] }, params);
     return this.categoriseRepository.findOne(query);
   }
 
-  update(id: number, updateCategoriseInput: UpdateCategoriseInput) {
-    return this.categoriseRepository.update(id, updateCategoriseInput);
+  update(id: number, updateCategorise: UpdateCategoriseDto) {
+    return this.categoriseRepository.update(id, updateCategorise);
   }
 
   remove(id: number) {
     return this.categoriseRepository.delete(id);
+  }
+
+  async findOrCreate({
+    name,
+    isPublished,
+    publishEnd,
+    publishStart,
+    parentCategoryId,
+  }: CreateCategoriseInput) {
+    const category = await this.findOne({
+      where: { name: name, parentCategory: { id: parentCategoryId } },
+    });
+    if (category) return category;
+
+    const newCategory: CreateCategoriseDto = {
+      name,
+      isPublished,
+      publishEnd,
+      publishStart,
+    };
+    if (parentCategoryId) {
+      newCategory.parentCategory = await this.findOne({
+        where: { id: parentCategoryId },
+      });
+    }
+
+    return this.create(newCategory);
+  }
+
+  async updateOrCreate(
+    id: number,
+    updateCategoriseInput: UpdateCategoriseInput,
+  ) {
+    try {
+      const category = await this.findOne({ where: { id } });
+      if (!category) return this.findOrCreate(updateCategoriseInput);
+
+      const updateCategory: UpdateCategoriseDto = {
+        id,
+        name: updateCategoriseInput.name,
+        isPublished: updateCategoriseInput.isPublished,
+        publishEnd: updateCategoriseInput.publishEnd,
+        publishStart: updateCategoriseInput.publishStart,
+        parentCategory: category.parentCategory,
+      };
+
+      if (updateCategoriseInput.parentCategoryId) {
+        updateCategory.parentCategory = await this.findOne({
+          where: { id: updateCategoriseInput.parentCategoryId },
+        });
+      }
+      await this.update(id, updateCategory);
+      return updateCategory;
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

@@ -3,7 +3,7 @@ import { BrandsService } from './brands.service';
 import { Brand } from './entities/brand.entity';
 import { CreateBrandInput } from './dto/create-brand.input';
 import { UpdateBrandInput } from './dto/update-brand.input';
-import { FindOneOptions, FindManyOptions } from 'typeorm';
+import { FindManyOptions } from 'typeorm';
 
 @Resolver(() => Brand)
 export class BrandsResolver {
@@ -11,7 +11,7 @@ export class BrandsResolver {
 
   @Mutation(() => Brand)
   createBrand(@Args('createBrandInput') createBrandInput: CreateBrandInput) {
-    return this.brandsService.create(createBrandInput);
+    return this.brandsService.findOrCreate(createBrandInput);
   }
 
   @Query(() => [Brand], { name: 'brands' })
@@ -20,13 +20,16 @@ export class BrandsResolver {
   }
 
   @Query(() => Brand, { name: 'brand' })
-  findOne(params: FindOneOptions<Brand> = {}) {
-    return this.brandsService.findOne(params);
+  findOne(@Args('id', { type: () => Int }) id: number) {
+    return this.brandsService.findOne({ where: { id } });
   }
 
   @Mutation(() => Brand)
   updateBrand(@Args('updateBrandInput') updateBrandInput: UpdateBrandInput) {
-    return this.brandsService.update(updateBrandInput.id, updateBrandInput);
+    return this.brandsService.updateOrCreate(
+      updateBrandInput.id,
+      updateBrandInput,
+    );
   }
 
   @Mutation(() => Brand)

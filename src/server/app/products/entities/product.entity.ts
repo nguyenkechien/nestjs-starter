@@ -5,7 +5,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -25,25 +25,31 @@ export class Product {
   @Column({ nullable: false })
   price: number;
 
+  @Field()
+  @Column('text')
+  description: string;
+
   @Field((_type) => Brand)
-  @OneToOne((_type) => Brand, (brand) => brand)
+  @ManyToOne((_type) => Brand, (brand) => brand.products, { nullable: false })
   brand?: Brand;
 
   @Field((_type) => Categorise)
-  @OneToOne((_type) => Categorise, (category) => category)
+  @ManyToOne((_type) => Categorise, (category) => category.products, {
+    nullable: false,
+  })
   category?: Categorise;
 
   @Field()
   @Column({ type: 'boolean', default: false, nullable: false })
-  publish: boolean;
+  isPublished: boolean;
 
-  @Field((_type) => Date)
+  @Field()
   @Column({ nullable: true })
-  publish_start: Date;
+  publishStart: Date;
 
-  @Field((_type) => Date)
+  @Field()
   @Column({ nullable: true })
-  publish_end: Date;
+  publishEnd: Date;
 
   @Field()
   @Column()

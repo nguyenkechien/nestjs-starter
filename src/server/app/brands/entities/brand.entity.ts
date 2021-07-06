@@ -17,8 +17,12 @@ export class Brand {
   id: number;
 
   @Field()
-  @Column({ nullable: false })
+  @Column({ nullable: false, unique: true })
   name: string;
+
+  @Field()
+  @Column('text')
+  description: string;
 
   @Field((_type) => [Product], { nullable: 'items' })
   @OneToMany((_type) => Product, (product) => product)
@@ -26,15 +30,15 @@ export class Brand {
 
   @Field()
   @Column({ type: 'boolean', default: false, nullable: false })
-  publish: boolean;
+  isPublished: boolean;
 
   @Field((_type) => Date)
   @Column({ nullable: true })
-  publish_start: Date;
+  publishStart: Date;
 
   @Field((_type) => Date)
   @Column({ nullable: true })
-  publish_end: Date;
+  publishEnd: Date;
 
   @Field()
   @Column()

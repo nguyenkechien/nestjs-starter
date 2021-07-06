@@ -1,22 +1,37 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Int,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { ProductsService } from './products.service';
 import { Product } from './entities/product.entity';
 import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
 import { GqlAuthGuard } from '../auth/graphql/gql-auth.guard';
-import { UseGuards } from '@nestjs/common';
+import { UseGuards, Inject } from '@nestjs/common';
 import { FindManyOptions, FindOneOptions } from 'typeorm';
+import { Brand } from '../brands/entities/brand.entity';
+import { BrandsService } from '../brands/brands.service';
+import { CategoriseService } from '../categorise/categorise.service';
 
 @Resolver(() => Product)
 export class ProductsResolver {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(
+    @Inject(ProductsService) private readonly productsService: ProductsService,
+    @Inject(BrandsService) private brandsService: BrandsService,
+    @Inject(CategoriseService) private categoryService: CategoriseService,
+  ) {}
 
   @Mutation(() => Product)
   // @UseGuards(GqlAuthGuard)
   createProduct(
     @Args('createProductInput') createProductInput: CreateProductInput,
   ) {
-    return this.productsService.create(createProductInput);
+    return this.productsService.findOrCreate(createProductInput);
   }
 
   @Query(() => [Product], { name: 'products' })
@@ -25,15 +40,15 @@ export class ProductsResolver {
   }
 
   @Query(() => Product, { name: 'product' })
-  findOne(params: FindOneOptions<Product> = {}) {
-    return this.productsService.findOne(params);
+  findOne(@Args('id', { type: () => Int }) id: number) {
+    return this.productsService.findOne({ where: { id } });
   }
 
   @Mutation(() => Product)
   updateProduct(
     @Args('updateProductInput') updateProductInput: UpdateProductInput,
   ) {
-    return this.productsService.update(
+    return this.productsService.updateOrCreate(
       updateProductInput.id,
       updateProductInput,
     );
@@ -43,5 +58,14 @@ export class ProductsResolver {
   @UseGuards(GqlAuthGuard)
   removeProduct(@Args('id', { type: () => Int }) id: number) {
     return this.productsService.remove(id);
+  }
+
+  @ResolveField()
+  brand(@Parent() product: Product) {
+    return this.brandsService.findOne({ where: { id: product.brand.id } });
+  }
+  @ResolveField()
+  category(@Parent() product: Product) {
+    return this.categoryService.findOne({ where: { id: product.category.id } });
   }
 }

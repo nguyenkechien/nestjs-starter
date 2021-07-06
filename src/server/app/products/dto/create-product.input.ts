@@ -1,31 +1,29 @@
-import { InputType, Field } from '@nestjs/graphql';
-import { Brand } from '../../../../client/app/types/graphql-zeus';
+import { InputType, Field, PartialType } from '@nestjs/graphql';
+import { Brand } from '../../brands/entities/brand.entity';
 import { Categorise } from '../../categorise/entities/categorise.entity';
-
+import { PartialType as MappedTypesPartialType } from '@nestjs/mapped-types';
+import {
+  CommonInput,
+  CommonDto,
+} from '../../../common/dto/common-create-input';
 @InputType()
-export class CreateProductInput {
+export class CreateProductInput extends PartialType(CommonInput) {
   @Field()
-  name: string;
+  name?: string;
   @Field()
-  price: number;
+  price?: number;
   @Field()
   brandId?: number;
   @Field()
-  categoryId: number;
+  categoryId?: number;
   @Field()
-  publish: boolean;
-  @Field()
-  publishStart: Date;
-  @Field()
-  publishEnd: Date;
+  description?: string;
 }
 
-export class CreateProductDto {
+export class CreateProductDto extends MappedTypesPartialType(CommonDto) {
   name?: string;
   price?: number;
   brand?: Brand;
   category?: Categorise;
-  publish?: boolean;
-  publish_start?: Date;
-  publish_end?: Date;
+  description?: string;
 }

@@ -27,11 +27,11 @@ export class CreateProducts1625333088826 implements MigrationInterface {
             type: 'int',
           },
           {
-            name: 'brand_id',
+            name: 'brandId',
             type: 'int',
           },
           {
-            name: 'category_id',
+            name: 'categoryId',
             type: 'int',
           },
           {
@@ -40,11 +40,11 @@ export class CreateProducts1625333088826 implements MigrationInterface {
             default: true,
           },
           {
-            name: 'publish_start',
+            name: 'publishStart',
             type: 'timestamp',
           },
           {
-            name: 'publish_end',
+            name: 'publishEnd',
             type: 'timestamp',
           },
           {
@@ -62,14 +62,14 @@ export class CreateProducts1625333088826 implements MigrationInterface {
     );
     await queryRunner.createForeignKeys('product', [
       new TableForeignKey({
-        columnNames: ['brand_id'],
+        columnNames: ['brandId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'brand',
         onDelete: 'CASCADE',
         onUpdate: 'NO ACTION',
       }),
       new TableForeignKey({
-        columnNames: ['category_id'],
+        columnNames: ['categoryId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'categorise',
         onDelete: 'CASCADE',

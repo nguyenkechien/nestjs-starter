@@ -23,11 +23,11 @@ export class CreateBrands1625332994855 implements MigrationInterface {
             default: true,
           },
           {
-            name: 'publish_start',
+            name: 'publishStart',
             type: 'timestamp',
           },
           {
-            name: 'publish_end',
+            name: 'publishEnd',
             type: 'timestamp',
           },
           {
@@ -48,10 +48,10 @@ export class CreateBrands1625332994855 implements MigrationInterface {
   public async down(queryRunner: QueryRunner): Promise<void> {
     const productTable = await queryRunner.getTable('product');
     const foreignKey = productTable.foreignKeys.find(
-      (fk) => fk.columnNames.indexOf('brand_id') !== -1,
+      (fk) => fk.columnNames.indexOf('brandId') !== -1,
     );
     await queryRunner.dropForeignKey('product', foreignKey);
-    await queryRunner.dropColumn('product', 'brand_id');
+    await queryRunner.dropColumn('product', 'brandId');
     await queryRunner.dropTable('product');
     await queryRunner.dropTable('brand');
   }

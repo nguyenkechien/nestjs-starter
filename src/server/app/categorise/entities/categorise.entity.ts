@@ -3,8 +3,8 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -16,32 +16,36 @@ import { Product } from '../../products/entities/product.entity';
 export class Categorise {
   @Field()
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Field()
   @Column({ nullable: false })
-  name: string;
+  name?: string;
 
-  @Field((_type) => [Categorise], { nullable: 'items' })
-  @OneToOne((_type) => Categorise, { nullable: true })
-  @JoinColumn({ referencedColumnName: 'id' })
-  parentCategory: Categorise;
+  @Field((_type) => Categorise, { nullable: true })
+  @ManyToOne((_type) => Categorise, (cate) => cate.parentCategory)
+  @JoinColumn()
+  parentCategory?: Categorise;
+
+  @Field()
+  @Column('text')
+  description: string;
 
   @Field((_type) => [Product], { nullable: 'items' })
-  @OneToMany((_type) => Product, (product) => product)
+  @OneToMany((_type) => Product, (product) => product.category)
   products?: Product[];
 
   @Field()
   @Column({ type: 'boolean', default: false, nullable: false })
-  publish: boolean;
+  isPublished: boolean;
 
   @Field((_type) => Date)
   @Column({ nullable: true })
-  publish_start: Date;
+  publishStart: Date;
 
   @Field((_type) => Date)
   @Column({ nullable: true })
-  publish_end: Date;
+  publishEnd: Date;
 
   @Field()
   @Column()

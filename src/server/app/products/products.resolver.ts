@@ -13,8 +13,7 @@ import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
 import { GqlAuthGuard } from '../auth/graphql/gql-auth.guard';
 import { UseGuards, Inject } from '@nestjs/common';
-import { FindManyOptions, FindOneOptions } from 'typeorm';
-import { Brand } from '../brands/entities/brand.entity';
+import { FindManyOptions } from 'typeorm';
 import { BrandsService } from '../brands/brands.service';
 import { CategoriseService } from '../categorise/categorise.service';
 
@@ -64,6 +63,7 @@ export class ProductsResolver {
   brand(@Parent() product: Product) {
     return this.brandsService.findOne({ where: { id: product.brand.id } });
   }
+
   @ResolveField()
   category(@Parent() product: Product) {
     return this.categoryService.findOne({ where: { id: product.category.id } });

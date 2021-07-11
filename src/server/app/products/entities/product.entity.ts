@@ -1,11 +1,14 @@
 import { ObjectType, Field } from '@nestjs/graphql';
 import { Brand } from '../../brands/entities/brand.entity';
 import { Categorise } from '../../categorise/entities/categorise.entity';
+import { Attribute } from '../../attributes/entities/attribute.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -38,6 +41,12 @@ export class Product {
     nullable: false,
   })
   category?: Categorise;
+
+  @Field((_type) => [Attribute], { nullable: 'items' })
+  @OneToMany((_type) => Attribute, (attributes) => attributes.product, {
+    nullable: true,
+  })
+  attributes?: Attribute[];
 
   @Field()
   @Column({ type: 'boolean', default: false, nullable: false })

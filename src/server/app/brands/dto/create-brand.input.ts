@@ -2,7 +2,7 @@ import { InputType, Field, PartialType } from '@nestjs/graphql';
 import {
   CommonInput,
   CommonDto,
-} from '../../../common/dto/common-create-input';
+} from '../../../common/types/common-create-input';
 import { PartialType as MappedTypesPartialType } from '@nestjs/mapped-types';
 
 @InputType()

@@ -35,30 +35,11 @@ type Thing {
   updated_at: DateTime!
 }
 
-type Attribute {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
 type Brand {
   id: Float!
   name: String!
   description: String!
   products: [Product]!
-  isPublished: Boolean!
-  publishStart: DateTime!
-  publishEnd: DateTime!
-  created_at: DateTime!
-  updated_at: DateTime!
-}
-
-type Product {
-  id: Float!
-  name: String!
-  price: Float!
-  description: String!
-  brand: Brand!
-  category: Categorise!
   isPublished: Boolean!
   publishStart: DateTime!
   publishEnd: DateTime!
@@ -79,6 +60,34 @@ type Categorise {
   updated_at: DateTime!
 }
 
+type Product {
+  id: Float!
+  name: String!
+  price: Float!
+  description: String!
+  brand: Brand!
+  category: Categorise!
+  attributes: [Attribute]!
+  isPublished: Boolean!
+  publishStart: DateTime!
+  publishEnd: DateTime!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type Attribute {
+  id: Float!
+  name: String!
+  value: String!
+  description: String!
+  product: [Product!]!
+  isPublished: Boolean!
+  publishStart: DateTime!
+  publishEnd: DateTime!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
 type Query {
   users: [User!]!
   whoAmI: User!
@@ -86,39 +95,91 @@ type Query {
   orders: [Order!]!
   attributes: [Attribute!]!
   attribute(id: Int!): Attribute!
+  products: [Product!]!
+  product(id: Int!): Product!
   categorise: [Categorise!]!
   category(id: Int!): Categorise!
   brands: [Brand!]!
   brand(id: Int!): Brand!
-  products: [Product!]!
-  product(id: Int!): Product!
 }
 
 type Mutation {
   createThing(name: String!): Thing!
   createOrder(alias: String!, thingName: String!): Order!
-  createAttribute(createAttributeInput: CreateAttributeInput!): Attribute!
+  createAttribute(createAttributesInput: CreateAttributeInput!): Attribute!
+  createMultiAttributes(createAttributesInput: [CreateAttributeInput!]!): [Attribute!]!
   updateAttribute(updateAttributeInput: UpdateAttributeInput!): Attribute!
   removeAttribute(id: Int!): Attribute!
+  createProduct(createProductInput: CreateProductInput!): Product!
+  updateProduct(updateProductInput: UpdateProductInput!): Product!
+  removeProduct(id: Int!): Product!
   createCategorise(createCategoriseInput: CreateCategoriseInput!): Categorise!
   updateCategorise(updateCategoriseInput: UpdateCategoriseInput!): Categorise!
   removeCategorise(id: Int!): Categorise!
   createBrand(createBrandInput: CreateBrandInput!): Brand!
   updateBrand(updateBrandInput: UpdateBrandInput!): Brand!
   removeBrand(id: Int!): Brand!
-  createProduct(createProductInput: CreateProductInput!): Product!
-  updateProduct(updateProductInput: UpdateProductInput!): Product!
-  removeProduct(id: Int!): Product!
 }
 
 input CreateAttributeInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  """This field set is published"""
+  isPublished: Boolean
+
+  """This field set date start publish"""
+  publishStart: DateTime
+
+  """This field set date end publish"""
+  publishEnd: DateTime
+  name: String!
+  value: String!
+  productId: Float!
 }
 
 input UpdateAttributeInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  """This field set is published"""
+  isPublished: Boolean
+
+  """This field set date start publish"""
+  publishStart: DateTime
+
+  """This field set date end publish"""
+  publishEnd: DateTime
+  name: String
+  value: String
+  productId: Float
+  id: Int!
+}
+
+input CreateProductInput {
+  """This field set is published"""
+  isPublished: Boolean
+
+  """This field set date start publish"""
+  publishStart: DateTime
+
+  """This field set date end publish"""
+  publishEnd: DateTime
+  name: String!
+  price: Float!
+  brandId: Float!
+  categoryId: Float!
+  description: String!
+}
+
+input UpdateProductInput {
+  """This field set is published"""
+  isPublished: Boolean
+
+  """This field set date start publish"""
+  publishStart: DateTime
+
+  """This field set date end publish"""
+  publishEnd: DateTime
+  name: String
+  price: Float
+  brandId: Float
+  categoryId: Float
+  description: String
   id: Int!
 }
 
@@ -178,39 +239,6 @@ input UpdateBrandInput {
   """This field set date end publish"""
   publishEnd: DateTime
   name: String
-  description: String
-  id: Int!
-}
-
-input CreateProductInput {
-  """This field set is published"""
-  isPublished: Boolean
-
-  """This field set date start publish"""
-  publishStart: DateTime
-
-  """This field set date end publish"""
-  publishEnd: DateTime
-  name: String!
-  price: Float!
-  brandId: Float!
-  categoryId: Float!
-  description: String!
-}
-
-input UpdateProductInput {
-  """This field set is published"""
-  isPublished: Boolean
-
-  """This field set date start publish"""
-  publishStart: DateTime
-
-  """This field set date end publish"""
-  publishEnd: DateTime
-  name: String
-  price: Float
-  brandId: Float
-  categoryId: Float
   description: String
   id: Int!
 }

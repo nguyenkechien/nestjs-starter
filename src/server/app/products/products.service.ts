@@ -27,12 +27,18 @@ export class ProductsService {
   }
 
   findAll(params: FindManyOptions<Product> = {}) {
-    const query = Object.assign({ relations: ['category', 'brand'] }, params);
+    const query = Object.assign(
+      { relations: ['category', 'brand', 'attributes'] },
+      params,
+    );
     return this.productRepository.find(query);
   }
 
   findOne(params: FindOneOptions<Product> = {}) {
-    const query = Object.assign({ relations: ['category', 'brand'] }, params);
+    const query = Object.assign(
+      { relations: ['category', 'brand', 'attributes'] },
+      params,
+    );
     return this.productRepository.findOne(query);
   }
 

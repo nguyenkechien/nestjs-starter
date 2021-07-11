@@ -1,5 +1,15 @@
-import { CreateAttributeInput } from './create-attribute.input';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
+import {
+  CreateAttributeDto,
+  CreateAttributeInput,
+} from './create-attribute.input';
+import { PartialType as MappedTypesPartialType } from '@nestjs/mapped-types';
+import { Field, InputType, PartialType, Int } from '@nestjs/graphql';
+
+export class UpdateAttributeDto extends MappedTypesPartialType(
+  CreateAttributeDto,
+) {
+  id: number;
+}
 
 @InputType()
 export class UpdateAttributeInput extends PartialType(CreateAttributeInput) {

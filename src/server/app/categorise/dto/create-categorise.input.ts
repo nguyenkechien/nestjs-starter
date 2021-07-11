@@ -1,8 +1,8 @@
 import { Field, InputType, Int, PartialType } from '@nestjs/graphql';
 import { Categorise } from '../entities/categorise.entity';
 import { PartialType as MappedTypesPartialType } from '@nestjs/mapped-types';
-import { CommonInput } from 'src/server/common/dto/common-create-input';
-import { CommonDto } from '../../../common/dto/common-create-input';
+import { CommonInput } from 'src/server/common/types/common-create-input';
+import { CommonDto } from '../../../common/types/common-create-input';
 @InputType()
 export class CreateCategoriseInput extends PartialType(CommonInput) {
   @Field()

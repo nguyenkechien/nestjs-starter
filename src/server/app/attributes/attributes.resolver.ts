@@ -10,9 +10,21 @@ export class AttributesResolver {
 
   @Mutation(() => Attribute)
   createAttribute(
-    @Args('createAttributeInput') createAttributeInput: CreateAttributeInput,
+    @Args('createAttributesInput')
+    attribute: CreateAttributeInput,
   ) {
-    return this.attributesService.create(createAttributeInput);
+    return this.attributesService.findOrCreate(attribute);
+  }
+
+  @Mutation(() => [Attribute])
+  createMultiAttributes(
+    @Args('createAttributesInput', { type: () => [CreateAttributeInput] })
+    attributesInput: CreateAttributeInput[],
+  ) {
+    return attributesInput.map(async (attribute) => {
+      const newAttribute = this.createAttribute(attribute);
+      return newAttribute;
+    });
   }
 
   @Query(() => [Attribute], { name: 'attributes' })
@@ -22,7 +34,7 @@ export class AttributesResolver {
 
   @Query(() => Attribute, { name: 'attribute' })
   findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.attributesService.findOne(id);
+    return this.attributesService.findOne({ where: { id } });
   }
 
   @Mutation(() => Attribute)

@@ -5,7 +5,7 @@ import { PartialType as MappedTypesPartialType } from '@nestjs/mapped-types';
 import {
   CommonInput,
   CommonDto,
-} from '../../../common/dto/common-create-input';
+} from '../../../common/types/common-create-input';
 @InputType()
 export class CreateProductInput extends PartialType(CommonInput) {
   @Field()

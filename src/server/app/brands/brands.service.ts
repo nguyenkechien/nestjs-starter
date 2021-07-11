@@ -11,8 +11,8 @@ export class BrandsService {
     @InjectRepository(Brand)
     private brandRepository: Repository<Brand>,
   ) {}
-  create(createBrandInput: CreateBrandInput) {
-    return this.brandRepository.save(createBrandInput);
+  create(brand: CreateBrandDto) {
+    return this.brandRepository.save(brand);
   }
 
   findAll(params: FindManyOptions<Brand> = {}) {
@@ -23,7 +23,7 @@ export class BrandsService {
     return this.brandRepository.findOne(params);
   }
 
-  update(id: number, updateBrandInput: UpdateBrandInput) {
+  update(id: number, updateBrandInput: UpdateBrandDto) {
     return this.brandRepository.update(id, updateBrandInput);
   }
 

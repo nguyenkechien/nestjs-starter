@@ -35,6 +35,10 @@ export class Product {
   @Column({ nullable: true, unique: true })
   slug: string;
 
+  @Field()
+  @Column({ nullable: false, unique: true })
+  sku: string;
+
   @Field((_type) => Brand)
   @ManyToOne((_type) => Brand, (brand) => brand.products, { nullable: false })
   brand?: Brand;

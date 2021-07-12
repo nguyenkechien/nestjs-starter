@@ -68,6 +68,7 @@ type Product {
   price: Float!
   description: String!
   slug: String!
+  sku: String!
   brand: Brand!
   category: Categorise!
   attributes: [Attribute]!
@@ -196,6 +197,7 @@ input CreateProductInput {
   brandId: Float!
   categoryId: Float!
   description: String!
+  sku: String!
 }
 
 input UpdateProductInput {
@@ -215,6 +217,7 @@ input UpdateProductInput {
   brandId: Float
   categoryId: Float
   description: String
+  sku: String
   id: Int!
 }
 

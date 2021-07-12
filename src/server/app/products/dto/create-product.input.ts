@@ -18,6 +18,8 @@ export class CreateProductInput extends PartialType(CommonInput) {
   categoryId?: number;
   @Field()
   description?: string;
+  @Field()
+  sku?: string;
 }
 
 export class CreateProductDto extends MappedTypesPartialType(CommonDto) {
@@ -26,4 +28,5 @@ export class CreateProductDto extends MappedTypesPartialType(CommonDto) {
   brand?: Brand;
   category?: Categorise;
   description?: string;
+  sku?: string;
 }

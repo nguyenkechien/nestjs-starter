@@ -12,6 +12,7 @@ import { Product } from './entities/product.entity';
 import { Repository, FindManyOptions, FindOneOptions } from 'typeorm';
 import { BrandsService } from '../brands/brands.service';
 import { CategoriseService } from '../categorise/categorise.service';
+import { kebabCase } from 'lodash';
 
 @Injectable()
 export class ProductsService {
@@ -42,55 +43,52 @@ export class ProductsService {
     return this.productRepository.findOne(query);
   }
 
-  update(id: number, updateProductInput: UpdateProductInput) {
-    return this.productRepository.update(id, updateProductInput);
+  update(id: number, updateInput: UpdateProductInput) {
+    return this.productRepository.update(id, updateInput);
   }
 
   remove(id: number) {
     return this.productRepository.delete(id);
   }
 
-  async findOrCreate(createProductInput: CreateProductInput) {
-    const brand = await this.brandsService.findOne({
-      where: { id: createProductInput.brandId },
-    });
-    const category = await this.categoryService.findOne({
-      where: { id: createProductInput.categoryId },
-    });
-
-    const queryProduct = {
-      name: createProductInput.name,
-      price: createProductInput.price,
-      brand,
-      category,
-    };
+  async findOrCreate({
+    brandId,
+    categoryId,
+    ...createInput
+  }: CreateProductInput) {
     const product: Product = await this.findOne({
-      where: { ...queryProduct },
+      where: { name: createInput.name },
     });
     if (product) return product;
 
-    const newProduct: CreateProductDto = {
-      ...queryProduct,
-      description: createProductInput.description,
-      isPublished: createProductInput.isPublished,
-      publishStart: createProductInput.publishStart,
-      publishEnd: createProductInput.publishEnd,
+    const brand = await this.brandsService.findOne({
+      where: { id: brandId },
+    });
+    const category = await this.categoryService.findOne({
+      where: { id: categoryId },
+    });
+
+    const createItem: CreateProductDto = {
+      ...createInput,
+      brand,
+      category,
     };
-    return this.create(newProduct);
+    createItem.slug = createInput.slug || kebabCase(createInput.name);
+    return this.create(createItem);
   }
 
-  async updateOrCreate(id: number, updateProductInput: UpdateProductInput) {
+  async updateOrCreate(id: number, updateInput: UpdateProductInput) {
     try {
       const product = await this.findOne({ where: { id } });
-      if (!product) return this.findOrCreate(updateProductInput);
+      if (!product) return this.findOrCreate(updateInput);
 
       const brand = await this.brandsService.findOne({
-        where: { id: updateProductInput.brandId },
+        where: { id: updateInput.brandId },
       });
       const category = await this.categoryService.findOne({
-        where: { id: updateProductInput.categoryId },
+        where: { id: updateInput.categoryId },
       });
-      const { brandId, categoryId, ...updateProductDto } = updateProductInput;
+      const { brandId, categoryId, ...updateProductDto } = updateInput;
       const updateProduct: UpdateProductDto = {
         ...updateProductDto,
         brand,

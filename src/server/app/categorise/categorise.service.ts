@@ -10,6 +10,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, Repository, FindManyOptions } from 'typeorm';
 import { Categorise } from './entities/categorise.entity';
+import { kebabCase } from 'lodash';
 
 @Injectable()
 export class CategoriseService {
@@ -41,56 +42,48 @@ export class CategoriseService {
   }
 
   async findOrCreate({
-    name,
-    isPublished,
-    publishEnd,
-    publishStart,
     parentCategoryId,
+    ...createInput
   }: CreateCategoriseInput) {
-    const category = await this.findOne({
-      where: { name: name, parentCategory: { id: parentCategoryId } },
-    });
+    const where: { [x: string]: any } = {
+      name: createInput.name,
+    };
+    if (parentCategoryId) where.parentCategory = { id: parentCategoryId };
+
+    const category = await this.findOne({ where });
     if (category) return category;
 
-    const newCategory: CreateCategoriseDto = {
-      name,
-      isPublished,
-      publishEnd,
-      publishStart,
-    };
+    const createItem: CreateCategoriseDto = { ...createInput };
+    createItem.slug = createInput.slug || kebabCase(createInput.name);
     if (parentCategoryId) {
-      newCategory.parentCategory = await this.findOne({
+      createItem.parentCategory = await this.findOne({
         where: { id: parentCategoryId },
       });
     }
 
-    return this.create(newCategory);
+    return this.create(createItem);
   }
 
-  async updateOrCreate(
-    id: number,
-    updateCategoriseInput: UpdateCategoriseInput,
-  ) {
+  async updateOrCreate(id: number, updateInput: UpdateCategoriseInput) {
     try {
       const category = await this.findOne({ where: { id } });
-      if (!category) return this.findOrCreate(updateCategoriseInput);
+      if (!category) return this.findOrCreate(updateInput);
 
-      const updateCategory: UpdateCategoriseDto = {
+      const { parentCategoryId, ...updateCategoriseDto } = updateInput;
+
+      const updateItem: UpdateCategoriseDto = {
+        ...updateCategoriseDto,
         id,
-        name: updateCategoriseInput.name,
-        isPublished: updateCategoriseInput.isPublished,
-        publishEnd: updateCategoriseInput.publishEnd,
-        publishStart: updateCategoriseInput.publishStart,
         parentCategory: category.parentCategory,
       };
 
-      if (updateCategoriseInput.parentCategoryId) {
-        updateCategory.parentCategory = await this.findOne({
-          where: { id: updateCategoriseInput.parentCategoryId },
+      if (parentCategoryId && parentCategoryId !== category.parentCategory.id) {
+        updateItem.parentCategory = await this.findOne({
+          where: { id: parentCategoryId },
         });
       }
-      await this.update(id, updateCategory);
-      return updateCategory;
+      await this.update(id, updateItem);
+      return updateItem;
     } catch (error) {
       console.log(error);
     }

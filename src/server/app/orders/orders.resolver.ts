@@ -23,7 +23,7 @@ export class OrdersResolver {
   ) {}
 
   @Query((_returns) => [Order])
-  @UseGuards(GqlAuthGuard)
+  // @UseGuards(GqlAuthGuard)
   orders(@CurrentUser() user: User) {
     return this.ordersService.findAll({ where: { user: user } });
   }
@@ -36,7 +36,7 @@ export class OrdersResolver {
   }
 
   @Mutation((_returns) => Order)
-  @UseGuards(GqlAuthGuard)
+  // @UseGuards(GqlAuthGuard)
   createOrder(
     @CurrentUser() user: User,
     @Args({ name: 'thingName', type: () => String }) thingName: string,

@@ -15,7 +15,7 @@ export class ThingsResolver {
   }
 
   @Mutation((_returns) => Thing)
-  @UseGuards(GqlAuthGuard)
+  // @UseGuards(GqlAuthGuard)
   createThing(@Args({ name: 'name', type: () => String }) name: string) {
     return this.thingsService.findOrCreateOne({
       where: { name },

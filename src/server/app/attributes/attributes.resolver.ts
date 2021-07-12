@@ -37,6 +37,17 @@ export class AttributesResolver {
     return this.attributesService.findOne({ where: { id } });
   }
 
+  @Mutation(() => [Attribute])
+  updateMultiAttributes(
+    @Args('updateAttributesInput', { type: () => [UpdateAttributeInput] })
+    attributesInput: UpdateAttributeInput[],
+  ) {
+    return attributesInput.map(async (attribute) => {
+      const newAttribute = this.updateAttribute(attribute);
+      return newAttribute;
+    });
+  }
+
   @Mutation(() => Attribute)
   updateAttribute(
     @Args('updateAttributeInput') updateAttributeInput: UpdateAttributeInput,

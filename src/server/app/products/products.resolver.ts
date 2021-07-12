@@ -16,6 +16,7 @@ import { UseGuards, Inject } from '@nestjs/common';
 import { FindManyOptions } from 'typeorm';
 import { BrandsService } from '../brands/brands.service';
 import { CategoriseService } from '../categorise/categorise.service';
+import { kebabCase } from 'lodash';
 
 @Resolver(() => Product)
 export class ProductsResolver {
@@ -54,7 +55,7 @@ export class ProductsResolver {
   }
 
   @Mutation(() => Product)
-  @UseGuards(GqlAuthGuard)
+  // @UseGuards(GqlAuthGuard)
   removeProduct(@Args('id', { type: () => Int }) id: number) {
     return this.productsService.remove(id);
   }
@@ -67,5 +68,11 @@ export class ProductsResolver {
   @ResolveField()
   category(@Parent() product: Product) {
     return this.categoryService.findOne({ where: { id: product.category.id } });
+  }
+
+  @ResolveField()
+  slug(@Parent() product: Product) {
+    if (!product.slug) return kebabCase(product.name);
+    return product.slug;
   }
 }

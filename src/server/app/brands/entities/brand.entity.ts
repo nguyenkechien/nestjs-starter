@@ -24,6 +24,10 @@ export class Brand {
   @Column('text')
   description: string;
 
+  @Field()
+  @Column({ nullable: true, unique: true })
+  slug: string;
+
   @Field((_type) => [Product], { nullable: 'items' })
   @OneToMany((_type) => Product, (product) => product)
   products?: Product[];

@@ -6,7 +6,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -31,6 +30,10 @@ export class Product {
   @Field()
   @Column('text')
   description: string;
+
+  @Field()
+  @Column({ nullable: true, unique: true })
+  slug: string;
 
   @Field((_type) => Brand)
   @ManyToOne((_type) => Brand, (brand) => brand.products, { nullable: false })

@@ -39,6 +39,7 @@ type Brand {
   id: Float!
   name: String!
   description: String!
+  slug: String!
   products: [Product]!
   isPublished: Boolean!
   publishStart: DateTime!
@@ -52,6 +53,7 @@ type Categorise {
   name: String!
   parentCategory: Categorise
   description: String!
+  slug: String!
   products: [Product]!
   isPublished: Boolean!
   publishStart: DateTime!
@@ -65,6 +67,7 @@ type Product {
   name: String!
   price: Float!
   description: String!
+  slug: String!
   brand: Brand!
   category: Categorise!
   attributes: [Attribute]!
@@ -80,7 +83,21 @@ type Attribute {
   name: String!
   value: String!
   description: String!
+  slug: String!
   product: [Product!]!
+  isPublished: Boolean!
+  publishStart: DateTime!
+  publishEnd: DateTime!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
+
+type Navigation {
+  id: Float!
+  name: String!
+  parentNavigation: Navigation
+  description: String!
+  slug: String!
   isPublished: Boolean!
   publishStart: DateTime!
   publishEnd: DateTime!
@@ -101,6 +118,8 @@ type Query {
   category(id: Int!): Categorise!
   brands: [Brand!]!
   brand(id: Int!): Brand!
+  navigations: [Navigation!]!
+  navigation(id: Int!): Navigation!
 }
 
 type Mutation {
@@ -108,6 +127,7 @@ type Mutation {
   createOrder(alias: String!, thingName: String!): Order!
   createAttribute(createAttributesInput: CreateAttributeInput!): Attribute!
   createMultiAttributes(createAttributesInput: [CreateAttributeInput!]!): [Attribute!]!
+  updateMultiAttributes(updateAttributesInput: [UpdateAttributeInput!]!): [Attribute!]!
   updateAttribute(updateAttributeInput: UpdateAttributeInput!): Attribute!
   removeAttribute(id: Int!): Attribute!
   createProduct(createProductInput: CreateProductInput!): Product!
@@ -119,9 +139,15 @@ type Mutation {
   createBrand(createBrandInput: CreateBrandInput!): Brand!
   updateBrand(updateBrandInput: UpdateBrandInput!): Brand!
   removeBrand(id: Int!): Brand!
+  createNavigation(createNavigationInput: CreateNavigationInput!): Navigation!
+  updateNavigation(updateNavigationInput: UpdateNavigationInput!): Navigation!
+  removeNavigation(id: Int!): Navigation!
 }
 
 input CreateAttributeInput {
+  """This field is slug"""
+  slug: String
+
   """This field set is published"""
   isPublished: Boolean
 
@@ -136,6 +162,9 @@ input CreateAttributeInput {
 }
 
 input UpdateAttributeInput {
+  """This field is slug"""
+  slug: String
+
   """This field set is published"""
   isPublished: Boolean
 
@@ -151,6 +180,9 @@ input UpdateAttributeInput {
 }
 
 input CreateProductInput {
+  """This field is slug"""
+  slug: String
+
   """This field set is published"""
   isPublished: Boolean
 
@@ -167,6 +199,9 @@ input CreateProductInput {
 }
 
 input UpdateProductInput {
+  """This field is slug"""
+  slug: String
+
   """This field set is published"""
   isPublished: Boolean
 
@@ -184,6 +219,9 @@ input UpdateProductInput {
 }
 
 input CreateCategoriseInput {
+  """This field is slug"""
+  slug: String
+
   """This field set is published"""
   isPublished: Boolean
 
@@ -200,6 +238,9 @@ input CreateCategoriseInput {
 }
 
 input UpdateCategoriseInput {
+  """This field is slug"""
+  slug: String
+
   """This field set is published"""
   isPublished: Boolean
 
@@ -217,6 +258,9 @@ input UpdateCategoriseInput {
 }
 
 input CreateBrandInput {
+  """This field is slug"""
+  slug: String
+
   """This field set is published"""
   isPublished: Boolean
 
@@ -230,6 +274,9 @@ input CreateBrandInput {
 }
 
 input UpdateBrandInput {
+  """This field is slug"""
+  slug: String
+
   """This field set is published"""
   isPublished: Boolean
 
@@ -240,5 +287,46 @@ input UpdateBrandInput {
   publishEnd: DateTime
   name: String
   description: String
+  id: Int!
+}
+
+input CreateNavigationInput {
+  """This field is slug"""
+  slug: String
+
+  """This field set is published"""
+  isPublished: Boolean
+
+  """This field set date start publish"""
+  publishStart: DateTime
+
+  """This field set date end publish"""
+  publishEnd: DateTime
+
+  """Example field (placeholder)"""
+  name: String!
+
+  """Parent Navigation Id field"""
+  parentNavigationId: Int!
+}
+
+input UpdateNavigationInput {
+  """This field is slug"""
+  slug: String
+
+  """This field set is published"""
+  isPublished: Boolean
+
+  """This field set date start publish"""
+  publishStart: DateTime
+
+  """This field set date end publish"""
+  publishEnd: DateTime
+
+  """Example field (placeholder)"""
+  name: String
+
+  """Parent Navigation Id field"""
+  parentNavigationId: Int
   id: Int!
 }

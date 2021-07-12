@@ -32,59 +32,52 @@ export class AttributesService {
     return this.attributeRepository.findOne(params);
   }
 
-  update(id: number, updateAttributeInput: UpdateAttributeDto) {
-    return this.attributeRepository.update(id, updateAttributeInput);
+  update(id: number, updateInput: UpdateAttributeDto) {
+    return this.attributeRepository.update(id, updateInput);
   }
 
   remove(id: number) {
     return this.attributeRepository.delete(id);
   }
 
-  async findOrCreate({
-    isPublished,
-    name,
-    publishEnd,
-    publishStart,
-    value,
-    productId,
-  }: CreateAttributeInput) {
+  async findOrCreate({ productId, ...createInput }: CreateAttributeInput) {
     try {
       const attribute = await this.findOne({
-        where: { name, value, product: { id: productId } },
+        where: {
+          name: createInput.name,
+          value: createInput.value,
+          product: { id: productId },
+        },
       });
       if (attribute) return attribute;
       const product: Product = await this.productsService.findOne({
         where: { id: productId },
       });
-      const createAttribute: CreateAttributeDto = {
-        isPublished,
-        name,
-        publishEnd,
-        publishStart,
-        value,
+      const createItem: CreateAttributeDto = {
         product,
+        ...createInput,
       };
-      return this.create(createAttribute);
+      return this.create(createItem);
     } catch (error) {
       console.log(error);
       throw error;
     }
   }
 
-  async updateOrCreate(id: number, updateAttributeInput: UpdateAttributeInput) {
+  async updateOrCreate(id: number, updateInput: UpdateAttributeInput) {
     try {
       const attribute = await this.findOne({ where: { id } });
-      if (!attribute) return this.findOrCreate(updateAttributeInput);
+      if (!attribute) return this.findOrCreate(updateInput);
 
       const product: Product = await this.productsService.findOne({
-        where: { id: updateAttributeInput.productId },
+        where: { id: updateInput.productId },
       });
-      const { productId, ...updateAttributeDto } = updateAttributeInput;
-      const updateAttribute: UpdateAttributeDto = {
+      const { productId, ...updateAttributeDto } = updateInput;
+      const updateItem: UpdateAttributeDto = {
         ...updateAttributeDto,
         product,
       };
-      return this.update(id, updateAttribute);
+      return this.update(id, updateItem);
     } catch (error) {
       console.log(error);
       throw error;

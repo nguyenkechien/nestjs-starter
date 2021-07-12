@@ -16,6 +16,7 @@ import { AttributesModule } from './attributes/attributes.module';
 import { CategoriseModule } from './categorise/categorise.module';
 import { BrandsModule } from './brands/brands.module';
 import { ProductsModule } from './products/products.module';
+import { NavigationsModule } from './navigations/navigations.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { ProductsModule } from './products/products.module';
     CategoriseModule,
     BrandsModule,
     ProductsModule,
+    NavigationsModule,
   ],
   providers: [SeedService, AppService],
   controllers: [AppController],

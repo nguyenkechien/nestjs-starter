@@ -23,7 +23,7 @@ export class CategoriseResolver {
   ) {}
 
   @Mutation(() => Categorise)
-  @UseGuards(GqlAuthGuard)
+  // @UseGuards(GqlAuthGuard)
   createCategorise(
     @Args('createCategoriseInput') createCategoriseInput: CreateCategoriseInput,
   ) {
@@ -32,8 +32,7 @@ export class CategoriseResolver {
 
   @Query(() => [Categorise], { name: 'categorise' })
   async findAll(params: FindManyOptions<Categorise> = {}) {
-    const cate = await this.categoriseService.findAll(params);
-    return cate;
+    return this.categoriseService.findAll(params);
   }
 
   @Query(() => Categorise, { name: 'category' })
@@ -42,7 +41,7 @@ export class CategoriseResolver {
   }
 
   @Mutation(() => Categorise)
-  @UseGuards(GqlAuthGuard)
+  // @UseGuards(GqlAuthGuard)
   updateCategorise(
     @Args('updateCategoriseInput') updateCategoriseInput: UpdateCategoriseInput,
   ) {
@@ -53,7 +52,7 @@ export class CategoriseResolver {
   }
 
   @Mutation(() => Categorise)
-  @UseGuards(GqlAuthGuard)
+  // @UseGuards(GqlAuthGuard)
   removeCategorise(@Args('id', { type: () => Int }) id: number) {
     return this.categoriseService.remove(id);
   }

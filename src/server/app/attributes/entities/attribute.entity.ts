@@ -29,6 +29,10 @@ export class Attribute {
   @Column({ type: 'text', nullable: true })
   description?: string;
 
+  @Field()
+  @Column({ nullable: true, unique: true })
+  slug: string;
+
   @Field((_type) => [Product])
   @ManyToOne((_type) => Product, (product) => product.attributes, {
     nullable: false,

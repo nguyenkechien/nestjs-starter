@@ -16,12 +16,11 @@ import { UseGuards, Inject } from '@nestjs/common';
 import { FindManyOptions } from 'typeorm';
 import { BrandsService } from '../brands/brands.service';
 import { CategoriseService } from '../categorise/categorise.service';
-import { kebabCase } from 'lodash';
 
 @Resolver(() => Product)
 export class ProductsResolver {
   constructor(
-    @Inject(ProductsService) private readonly productsService: ProductsService,
+    @Inject(ProductsService) private productsService: ProductsService,
     @Inject(BrandsService) private brandsService: BrandsService,
     @Inject(CategoriseService) private categoryService: CategoriseService,
   ) {}
@@ -71,8 +70,8 @@ export class ProductsResolver {
   }
 
   @ResolveField()
-  slug(@Parent() product: Product) {
-    if (!product.slug) return kebabCase(product.name);
-    return product.slug;
+  gallery(@Parent() product: Product) {
+    if (!product.gallery) return [];
+    return product.gallery.map((item) => item);
   }
 }

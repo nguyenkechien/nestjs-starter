@@ -36,74 +36,112 @@ type Thing {
 }
 
 type Brand {
+  slug: String
+  isPublished: Boolean
+  publishStart: DateTime
+  publishEnd: DateTime
   id: Float!
-  name: String!
-  description: String!
-  slug: String!
-  products: [Product]!
-  isPublished: Boolean!
-  publishStart: DateTime!
-  publishEnd: DateTime!
+  title: String!
+  name: String
+  description: String
+  code: String
   created_at: DateTime!
   updated_at: DateTime!
+  products: [Product]!
 }
 
 type Categorise {
+  slug: String
+  isPublished: Boolean
+  publishStart: DateTime
+  publishEnd: DateTime
   id: Float!
-  name: String!
-  parentCategory: Categorise
-  description: String!
-  slug: String!
-  products: [Product]!
-  isPublished: Boolean!
-  publishStart: DateTime!
-  publishEnd: DateTime!
+  title: String!
+  name: String
+  description: String
+  code: String
   created_at: DateTime!
   updated_at: DateTime!
+  parentCategory: Categorise
+  products: [Product!]
+}
+
+type ProductGallery {
+  id: Float!
+  title: String!
+  name: String
+  description: String
+  code: String
+  created_at: DateTime!
+  updated_at: DateTime!
+  product: [Product!]!
+  imageUrl: String!
+  order: Float!
 }
 
 type Product {
+  slug: String
+  isPublished: Boolean
+  publishStart: DateTime
+  publishEnd: DateTime
   id: Float!
-  name: String!
-  price: Float!
-  description: String!
-  slug: String!
-  sku: String!
-  brand: Brand!
-  category: Categorise!
-  attributes: [Attribute]!
-  isPublished: Boolean!
-  publishStart: DateTime!
-  publishEnd: DateTime!
+  title: String!
+  name: String
+  description: String
+  code: String
   created_at: DateTime!
   updated_at: DateTime!
+  price: Float
+  sku: String!
+  brand: Brand
+  category: Categorise
+  attributes: [Attribute]!
+  gallery: [ProductGallery]!
 }
 
 type Attribute {
+  slug: String
+  isPublished: Boolean
+  publishStart: DateTime
+  publishEnd: DateTime
   id: Float!
-  name: String!
-  value: String!
-  description: String!
-  slug: String!
-  product: [Product!]!
-  isPublished: Boolean!
-  publishStart: DateTime!
-  publishEnd: DateTime!
+  title: String!
+  name: String
+  description: String
+  code: String
   created_at: DateTime!
   updated_at: DateTime!
+  value: String!
+  product: Product!
 }
 
 type Navigation {
+  slug: String
+  isPublished: Boolean
+  publishStart: DateTime
+  publishEnd: DateTime
   id: Float!
-  name: String!
-  parentNavigation: Navigation
-  description: String!
-  slug: String!
-  isPublished: Boolean!
-  publishStart: DateTime!
-  publishEnd: DateTime!
+  title: String!
+  name: String
+  description: String
+  code: String
   created_at: DateTime!
   updated_at: DateTime!
+  parentNavigation: Navigation
+}
+
+type Image {
+  id: Float!
+  title: String!
+  name: String
+  description: String
+  code: String
+  created_at: DateTime!
+  updated_at: DateTime!
+  alt: String
+  type: String
+  size: String
+  imageUrl: String
 }
 
 type Query {
@@ -121,6 +159,8 @@ type Query {
   brand(id: Int!): Brand!
   navigations: [Navigation!]!
   navigation(id: Int!): Navigation!
+  images: [Image!]!
+  image(id: Int!): Image!
 }
 
 type Mutation {
@@ -143,6 +183,9 @@ type Mutation {
   createNavigation(createNavigationInput: CreateNavigationInput!): Navigation!
   updateNavigation(updateNavigationInput: UpdateNavigationInput!): Navigation!
   removeNavigation(id: Int!): Navigation!
+  createImage(createImageInput: CreateImageInput!): Image!
+  updateImage(updateImageInput: UpdateImageInput!): Image!
+  removeImage(id: Int!): Image!
 }
 
 input CreateAttributeInput {
@@ -157,8 +200,11 @@ input CreateAttributeInput {
 
   """This field set date end publish"""
   publishEnd: DateTime
+  title: String!
   name: String!
   value: String!
+  code: String!
+  description: String!
   productId: Float!
 }
 
@@ -174,8 +220,11 @@ input UpdateAttributeInput {
 
   """This field set date end publish"""
   publishEnd: DateTime
+  title: String
   name: String
   value: String
+  code: String
+  description: String
   productId: Float
   id: Int!
 }
@@ -331,5 +380,44 @@ input UpdateNavigationInput {
 
   """Parent Navigation Id field"""
   parentNavigationId: Int
+  id: Int!
+}
+
+input CreateImageInput {
+  """This field is slug"""
+  slug: String
+
+  """This field set is published"""
+  isPublished: Boolean
+
+  """This field set date start publish"""
+  publishStart: DateTime
+
+  """This field set date end publish"""
+  publishEnd: DateTime
+  title: String!
+  alt: String
+  type: String
+  size: String
+  imageUrl: String
+}
+
+input UpdateImageInput {
+  """This field is slug"""
+  slug: String
+
+  """This field set is published"""
+  isPublished: Boolean
+
+  """This field set date start publish"""
+  publishStart: DateTime
+
+  """This field set date end publish"""
+  publishEnd: DateTime
+  title: String
+  alt: String
+  type: String
+  size: String
+  imageUrl: String
   id: Int!
 }

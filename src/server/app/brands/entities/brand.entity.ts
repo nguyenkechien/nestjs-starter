@@ -8,49 +8,15 @@ import {
 } from 'typeorm';
 import { Product } from '../../products/entities/product.entity';
 import { Entity } from 'typeorm';
-
+import {
+  DateAudit,
+  BaseEntity,
+  CommonEntity,
+} from 'src/server/common/types/base-entity';
 @ObjectType()
 @Entity()
-export class Brand {
-  @Field()
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Field()
-  @Column({ nullable: false, unique: true })
-  name: string;
-
-  @Field()
-  @Column('text')
-  description: string;
-
-  @Field()
-  @Column({ nullable: true, unique: true })
-  slug: string;
-
+export class Brand extends DateAudit(BaseEntity(CommonEntity)) {
   @Field((_type) => [Product], { nullable: 'items' })
   @OneToMany((_type) => Product, (product) => product)
   products?: Product[];
-
-  @Field()
-  @Column({ type: 'boolean', default: false, nullable: false })
-  isPublished: boolean;
-
-  @Field((_type) => Date)
-  @Column({ nullable: true })
-  publishStart: Date;
-
-  @Field((_type) => Date)
-  @Column({ nullable: true })
-  publishEnd: Date;
-
-  @Field()
-  @Column()
-  @CreateDateColumn()
-  created_at: Date;
-
-  @Field()
-  @Column()
-  @UpdateDateColumn()
-  updated_at: Date;
 }

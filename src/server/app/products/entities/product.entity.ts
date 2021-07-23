@@ -2,48 +2,30 @@ import { ObjectType, Field } from '@nestjs/graphql';
 import { Brand } from '../../brands/entities/brand.entity';
 import { Categorise } from '../../categorise/entities/categorise.entity';
 import { Attribute } from '../../attributes/entities/attribute.entity';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { ProductGallery } from './product-gallery.entity';
 import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+  BaseEntity,
+  DateAudit,
+  CommonEntity,
+} from 'src/server/common/types/base-entity';
 
 @ObjectType()
 @Entity()
-export class Product {
-  @Field()
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Field()
-  @Column({ nullable: false })
-  name: string;
-
-  @Field()
-  @Column({ nullable: false })
+export class Product extends DateAudit(BaseEntity(CommonEntity)) {
+  @Field({ nullable: true })
+  @Column({ nullable: false, default: 0 })
   price: number;
-
-  @Field()
-  @Column('text')
-  description: string;
-
-  @Field()
-  @Column({ nullable: true, unique: true })
-  slug: string;
 
   @Field()
   @Column({ nullable: false, unique: true })
   sku: string;
 
-  @Field((_type) => Brand)
+  @Field((_type) => Brand, { nullable: true })
   @ManyToOne((_type) => Brand, (brand) => brand.products, { nullable: false })
   brand?: Brand;
 
-  @Field((_type) => Categorise)
+  @Field((_type) => Categorise, { nullable: true })
   @ManyToOne((_type) => Categorise, (category) => category.products, {
     nullable: false,
   })
@@ -55,25 +37,11 @@ export class Product {
   })
   attributes?: Attribute[];
 
-  @Field()
-  @Column({ type: 'boolean', default: false, nullable: false })
-  isPublished: boolean;
-
-  @Field()
-  @Column({ nullable: true })
-  publishStart: Date;
-
-  @Field()
-  @Column({ nullable: true })
-  publishEnd: Date;
-
-  @Field()
-  @Column()
-  @CreateDateColumn()
-  created_at: Date;
-
-  @Field()
-  @Column()
-  @UpdateDateColumn()
-  updated_at: Date;
+  @Field((_type) => [ProductGallery], { nullable: 'items' })
+  @OneToMany(
+    (_type) => ProductGallery,
+    (productGallery) => productGallery.product,
+    { nullable: true },
+  )
+  gallery: ProductGallery[];
 }

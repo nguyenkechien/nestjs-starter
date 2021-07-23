@@ -3,6 +3,7 @@ import { AttributesService } from './attributes.service';
 import { Attribute } from './entities/attribute.entity';
 import { CreateAttributeInput } from './dto/create-attribute.input';
 import { UpdateAttributeInput } from './dto/update-attribute.input';
+import { FindManyOptions } from 'typeorm';
 
 @Resolver(() => Attribute)
 export class AttributesResolver {
@@ -28,8 +29,8 @@ export class AttributesResolver {
   }
 
   @Query(() => [Attribute], { name: 'attributes' })
-  findAll() {
-    return this.attributesService.findAll();
+  findAll(params: FindManyOptions<Attribute> = {}) {
+    return this.attributesService.findAll(params);
   }
 
   @Query(() => Attribute, { name: 'attribute' })

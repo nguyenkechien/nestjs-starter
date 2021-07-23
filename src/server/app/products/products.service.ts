@@ -29,7 +29,7 @@ export class ProductsService {
 
   findAll(params: FindManyOptions<Product> = {}) {
     const query = Object.assign(
-      { relations: ['category', 'brand', 'attributes'] },
+      { relations: ['category', 'brand', 'attributes', 'gallery'] },
       params,
     );
     return this.productRepository.find(query);
@@ -37,7 +37,7 @@ export class ProductsService {
 
   findOne(params: FindOneOptions<Product> = {}) {
     const query = Object.assign(
-      { relations: ['category', 'brand', 'attributes'] },
+      { relations: ['category', 'brand', 'attributes', 'gallery'] },
       params,
     );
     return this.productRepository.findOne(query);

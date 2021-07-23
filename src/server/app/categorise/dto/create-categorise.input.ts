@@ -22,4 +22,5 @@ export class CreateCategoriseDto extends MappedTypesPartialType(CommonDto) {
   name?: string;
   parentCategory?: Categorise;
   description?: string;
+  title?: string;
 }
